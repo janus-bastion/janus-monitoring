@@ -1,0 +1,25 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/lib/docker/containers/*/*.log
+    json.keys_under_root: true
+    json.add_error_key: true
+    json.ignore_decoding_error: true
+    multiline.pattern: '^\s'
+    multiline.negate: false
+    multiline.match: after
+    processors:
+      - add_docker_metadata: ~
+      - drop_event:
+          when:
+            not:
+              or:
+                - contains:
+                    docker.container.name: "janus-nginx1"
+                - contains:
+                    docker.container.name: "janus-nginx2"
+
+output.logstash:
+  hosts: ["192.168.100.11:5044"]
+
