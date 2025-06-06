@@ -55,7 +55,7 @@ volumes:
   elastic_data:
 
 networks:
-  monitoring-net:
+  janus-monitoring-net:
     driver: bridge
     ipam:
       config:
